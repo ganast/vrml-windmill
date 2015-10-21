@@ -1,0 +1,258 @@
+#VRML V2.0 utf8
+
+#
+# VRML Windmill - A simple VRML scene aiming to demonstrate basic principles and
+# techniques in designing VRML worlds in particular and virtual worlds in
+# general.
+#
+# Copyright (C) 2010-2015 by George Anastassakis
+#
+# VRML Windmill is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# VRML Windmill is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# VRML Windmill. If not, see http://www.gnu.org/licenses/.
+#
+# For questions and comments please contact george.anastassakis@gmail.com.
+#
+
+#-------------------------------------------------------------------------------
+# World-level elements
+#-------------------------------------------------------------------------------
+
+WorldInfo {
+
+	title "VRML Windmill"
+
+	info [
+		"A simple VRML scene aiming to demonstrate basic principles and techniques in designing VRML worlds in particular and virtual worlds in general."
+		"Copyright (C) by George Anastassakis"
+		"VRML Windmill is made available under the terms of the GNU General Public License as published by the Free Software Foundation, available at http://www.gnu.org/licenses/."
+		"Contact: george.anastassakis@gmail.com"
+	]
+}
+
+#-------------------------------------------------------------------------------
+# Windmill
+#-------------------------------------------------------------------------------
+
+# The entire windmill
+DEF windmill Transform {
+
+	children [
+
+		# Position and orient sails with respect to axle
+		DEF sails_align Transform	{
+
+			rotation 0 1 0 -0.785
+			translation	-1.75 1.8 1.75
+
+			children [
+
+				# The windmill's sails
+				DEF sails Transform {
+
+					children [
+
+						# First sails half
+						DEF	sails_h_1 Transform	{
+
+							children [
+
+								# First sails quarter
+								DEF	sails_q_1 Transform	{
+
+									children [
+
+										# First sails segment, consists of one sail and one line
+										DEF	sails_segment_1 Transform	{
+
+											children [
+
+												# A sail
+												DEF sail Transform {
+
+													children [
+
+														Shape {
+
+															geometry IndexedFaceSet {
+
+																solid FALSE
+
+																coord Coordinate {
+
+																	point [
+																		 0 0 0,
+																		-0.5 2 0,
+																		 0.5 2 0
+																	]
+																}
+
+																coordIndex [
+																	0 1 2 0 -1
+																]
+															}
+															
+															appearance Appearance {
+
+																material DEF sail_mat Material {
+																}
+															}
+														}
+													]
+												}
+
+												# A line
+												DEF	line Transform	{
+
+													children [
+
+														Shape {
+
+															geometry IndexedLineSet {
+
+																coord Coordinate {
+
+																	point [
+																		 -0.5 2.0 0,
+																		 -1.060660172 1.767766953 0
+																	]
+																}
+
+																coordIndex [
+																	0 1 -1
+																]
+															}
+
+															appearance Appearance {
+																material USE sail_mat
+															}
+														}
+													]
+												}
+											]
+										}
+
+										# Re-use first sails segment to define second sails segment
+										DEF sails_segment_2 Transform {
+
+											rotation 0 0 1 0.785
+
+											children [
+												USE	sails_segment_1
+											]
+										}
+									]
+								}
+
+								# Re-use first sails quarter to define second sails quarter
+								DEF sails_q_2 Transform	{
+
+									rotation 0 0 1 1.571
+
+									children [
+										USE	sails_q_1
+									]
+								}
+							]
+						}
+
+						# Re-use first sails half to define second sails half
+						DEF sails_h_2 Transform {
+
+							rotation 0 0 1 3.142
+
+							children [
+								USE	sails_h_1
+							]
+						}
+					]
+				}
+			]
+		}
+
+		# The windmill's roof
+		DEF roof Transform {
+
+			translation	0 3.5 0
+
+			children [
+
+				Shape {
+			
+					geometry Cone {
+						height 2
+						bottomRadius 2.20
+					}
+			
+					appearance Appearance {
+
+						material DEF roof_mat Material {
+						}
+					}
+				}
+			]
+		}
+
+		# The windmill's body
+		DEF body Transform {
+
+			children [
+
+				Shape {
+
+					geometry Cylinder {
+						height 5
+						radius 2
+					}
+
+					appearance Appearance {
+
+						material DEF body_mat Material {
+						}
+					}
+				}
+			]
+		}
+
+		# Position and orient axle with respect to body
+		DEF axle Transform {
+
+			translation	-1.5 1.8 1.5
+			rotation 0 1 0 0.785
+
+			children [
+
+				# The windmill's axle
+				Transform {
+
+					rotation 0 0 1 1.571
+
+					children [
+
+						Shape {
+
+							geometry Cylinder {
+								height 1
+								radius 0.2
+							}
+
+							appearance Appearance {
+
+								material DEF axle_mat Material {
+								}
+							}
+						}
+					]
+				}
+			]
+		}
+	]
+}
